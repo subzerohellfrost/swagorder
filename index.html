@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Subzero Hellfrost Riders Swag</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00bfff;
+      text-shadow: 0 0 10px #00bfff;
+      margin-bottom: 10px;
+    }
+
+    .preview-container {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      border: 2px solid gold;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 15px #00bfff;
+      background-color: #111;
+      flex-wrap: wrap;
+    }
+
+    .preview-section {
+      flex: 1;
+      min-width: 250px;
+      margin: 5px;
+      text-align: center;
+    }
+
+    .preview-section img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 5px;
+    }
+
+    .caption {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: gold;
+      font-weight: bold;
+      padding: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 5px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid gold;
+      border-radius: 5px;
+      background-color: #111;
+      color: #fff;
+    }
+
+    button {
+      background-color: #000;
+      color: gold;
+      border: 2px solid gold;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    #cartItems {
+      margin-top: 15px;
+      text-align: left;
+      border: 1px solid gold;
+      padding: 10px;
+      border-radius: 5px;
+      max-height: 200px;
+      overflow-y: auto;
+      background-color: #111;
+    }
+
+    #cartItems li {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      cursor: pointer;
+    }
+
+    .removeBtn {
+      background-color: #330000;
+      border: 1px solid red;
+      color: red;
+      font-size: 12px;
+      padding: 2px 5px;
+      border-radius: 3px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+
+    #total {
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: right;
+      color: #00bfff;
+      font-size: 1.1em;
+    }
+
+    #message {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    #message.success {
+      background-color: #003300;
+      color: #66ff66;
+      border: 1px solid #00ff00;
+    }
+
+    #message.error {
+      background-color: #330000;
+      color: #ff6666;
+      border: 1px solid #ff0000;
+    }
+
+    .info-note {
+      color: #00bfff;
+      font-style: italic;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      text-align: left;
+    }
+
+    .sub-option {
+      margin-left: 15px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Subzero Hellfrost Riders Swag</h1>
+
+  <!-- Preview -->
+  <div class="preview-container">
+    <div class="preview-section">
+      <img id="frontImage" src="" alt="Front">
+      <div class="caption" id="frontCaption">Front</div>
+    </div>
+    <div class="preview-section">
+      <img id="backImage" src="" alt="Back Patch">
+      <div class="caption" id="backCaption">Back Patch</div>
+    </div>
+  </div>
+
+  <!-- Order Form -->
+  <form id="orderForm">
+    <label>Item:</label>
+    <select name="item" required>
+      <option value="T-Shirt">T-Shirt</option>
+      <option value="Hoodie">Hoodie</option>
+    </select>
+
+    <label>Size:</label>
+    <select name="size" required>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="2XL">2XL</option>
+      <option value="3XL">3XL</option>
+    </select>
+
+    <label>Front Option:</label>
+    <select name="front" id="frontSelect" required>
+      <option value="" disabled selected>Select a front</option>
+      <option value="A">Option A</option>
+      <option value="B">Option B</option>
+      <option value="C">Option C</option>
+      <option value="D">Option D</option>
+    </select>
+
+    <label>Back Patch:</label>
+    <select name="back" id="backSelect" required>
+      <option value="" disabled selected>Select a back patch</option>
+      <option value="Brother (Rider)">Brother (Rider)</option>
+      <option value="Brother (Sport Rider)">Brother (Sport Rider)</option>
+      <option value="Hearts">Hearts</option>
+      <option value="Supporter">Supporter</option>
+      <option value="Property Of">Property Of</option>
+    </select>
+
+    <div class="sub-option" id="backSubOptions" style="display:none;">
+      <label>Blackout or Standard White:</label>
+      <select id="backColor">
+        <option value="Blackout">Blackout</option>
+        <option value="Standard White">Standard White</option>
+      </select>
+    </div>
+
+    <label>Quantity:</label>
+    <input name="quantity" type="number" min="1" value="1" required>
+
+    <button type="button" id="addToCartBtn">Add to Cart</button>
+  </form>
+
+  <!-- Cart -->
+  <div id="cartItems">
+    <strong>Cart:</strong>
+    <ul id="cartList"></ul>
+  </div>
+
+  <p id="total">Total: $0</p>
+
+  <!-- Customer Info -->
+  <label>Name:</label>
+  <input id="customerName" required>
+
+  <label>Email:</label>
+  <input id="customerEmail" type="email" required>
+
+  <label>Phone Number:</label>
+  <input id="customerPhone" type="tel" placeholder="e.g., (555) 555-5555" required>
+
+  <label>Shipping Address:</label>
+  <textarea id="customerAddress" placeholder="Street, City, State, ZIP" required></textarea>
+
+  <div class="info-note">
+    Once your order has been placed, a brother will contact you to confirm your order and collect payment. Shipping is included in the price.
+  </div>
+
+  <label>Notes:</label>
+  <textarea id="customerNotes" placeholder="Any special instructions?"></textarea>
+
+  <button id="submitOrderBtn">Submit Order</button>
+
+  <div id="message"></div>
+
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    emailjs.init("aQIlRxnSDExbWv09B"); // Public Key
+
+    const basePrices = {
+      "T-Shirt": { S: 15, M: 15, L: 17, XL: 18, "2XL": 19, "3XL": 20 },
+      "Hoodie": { S: 30, M: 32, L: 34, XL: 36, "2XL": 38, "3XL": 40 }
+    };
+
+    const frontImage = document.getElementById('frontImage');
+    const backImage = document.getElementById('backImage');
+    const frontCaption = document.getElementById('frontCaption');
+    const backCaption = document.getElementById('backCaption');
+
+    const frontSelect = document.getElementById('frontSelect');
+    const backSelect = document.getElementById('backSelect');
+    const backSubOptions = document.getElementById('backSubOptions');
+    const backColor = document.getElementById('backColor');
+
+    const itemSelect = document.querySelector('select[name="item"]');
+    const sizeSelect = document.querySelector('select[name="size"]');
+    const qtyInput = document.querySelector('input[name="quantity"]');
+
+    const cartList = document.getElementById('cartList');
+    const totalDisplay = document.getElementById('total');
+
+    let cart = [];
+
+    function loadImage(imgElement, baseName, captionElement, label) {
+      const extensions = ['jpg','JPG','png','PNG'];
+      let loaded = false;
+
+      extensions.forEach(ext => {
+        if (!loaded) {
+          const testImg = new Image();
+          testImg.onload = () => {
+            imgElement.src = `${baseName}.${ext}`;
+            captionElement.textContent = `${label} ${baseName}`;
+            loaded = true;
+          };
+          testImg.src = `${baseName}.${ext}`;
+        }
+      });
+
+      setTimeout(() => {
+        if (!loaded) {
+          imgElement.src = '';
+          captionElement.textContent = label;
+        }
+      }, 500);
+    }
+
+    function updatePreview() {
+      const front = frontSelect.value;
+      const back = backSelect.value;
+
+      if (front) loadImage(frontImage, front, frontCaption, 'Front');
+      else { frontImage.src = ''; frontCaption.textContent = 'Front'; }
+
+      if (back) loadImage(backImage, back.replace(/\s|\(|\)/g,''), backCaption, 'Back Patch');
+      else { backImage.src = ''; backCaption.textContent = 'Back Patch'; }
+    }
+
+    backSelect.addEventListener('change', () => {
+      if (backSelect.value) {
+        backSubOptions.style.display = 'block';
+      } else {
+        backSubOptions.style.display = 'none';
+      }
+      updatePreview();
+    });
+
+    function updateCartDisplay() {
+      cartList.innerHTML = "";
+      let total = 0;
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `${item.quantity}x ${item.item} (${item.size}) - Front ${item.front} / ${item.back} - Color: ${item.color} - $${item.price.toFixed(2)}
+          <button class="removeBtn" onclick="removeFromCart(${index})">Remove</button>`;
+        cartList.appendChild(li);
+        total += item.price * item.quantity;
+      });
+      totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartDisplay();
+    }
+
+    document.getElementById('addToCartBtn').addEventListener('click', () => {
+      const item = itemSelect.value;
+      const size = sizeSelect.value;
+      const front = frontSelect.value;
+      const back = backSelect.value;
+      const color = backColor.value;
+      const quantity = parseInt(qtyInput.value) || 1;
+
+      if (!item || !size || !front || !back || !color) return;
+
+      const price = basePrices[item][size];
+      cart.push({ item, size, front, back, color, quantity, price });
+
+      updateCartDisplay();
+
+      qtyInput.value = 1;
+      frontSelect.selectedIndex = 0;
+      backSelect.selectedIndex = 0;
+      backColor.selectedIndex = 0;
+      backSubOptions.style.display = 'none';
+      updatePreview();
+    });
+
+    frontSelect.addEventListener('change', updatePreview);
+
+    document.getElementById('submitOrderBtn').addEventListener('click', () => {
+      const name = document.getElementById('customerName').value;
+      const email = document.getElementById('customerEmail').value;
+      const phone = document.getElementById('customerPhone').value;
+      const address = document.getElementById('customerAddress').value;
+      const notes = document.getElementById('customerNotes').value;
+
+      if (!name || !email || !phone || !address || cart.length === 0) {
+        alert("Please enter all required fields and add at least one item to cart.");
+        return;
+      }
+
+      const orderDetails = cart.map(i => 
+        `${i.quantity}x ${i.item} (${i.size}) - Front ${i.front} / ${i.back} - Color: ${i.color} - $${i.price}`
+      ).join('\n');
+
+      const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+      const data = {
+        name,
+        email,
+        phone,
+        address,
+        notes,
+        order: orderDetails,
+        total: `$${total.toFixed(2)}`
+      };
+
+      emailjs.send("service_ftlegjv", "subzeroswagorders", data)
+        .then(() => {
+          alert("✅ Thank you! A Brother will be in touch with you soon to confirm your order and assist with payment.");
+          cart = [];
+          updateCartDisplay();
+          document.getElementById('customerName').value = '';
+          document.getElementById('customerEmail').value = '';
+          document.getElementById('customerPhone').value = '';
+          document.getElementById('customerAddress').value = '';
+          document.getElementById('customerNotes').value = '';
+          qtyInput.value = 1;
+          frontSelect.selectedIndex = 0;
+          backSelect.selectedIndex = 0;
+          backColor.selectedIndex = 0;
+          backSubOptions.style.display = 'none';
+          updatePreview();
+        })
+        .catch(err => {
+          console.error(err);
+          alert("❌ Error sending order. Please try again.");
+        });
+    });
+
+    updatePreview();
+  </script>
+</body>
+</html>
