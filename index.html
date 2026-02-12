@@ -254,7 +254,7 @@
 
   <div id="message"></div>
 
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript"        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"> </script>
   <script>
     emailjs.init("aQIlRxnSDExbWv09B"); // Public Key
 
@@ -397,7 +397,7 @@
         total: `$${total.toFixed(2)}`
       };
 
-      emailjs.send("service_ftlegjv", "subzeroswagorders", data)
+      emailjs.send("service_ftlegjv", "template_42rdq3n", data)
         .then(() => {
           alert("✅ Thank you! A Brother will be in touch with you soon to confirm your order and assist with payment.");
           cart = [];
@@ -424,3 +424,4 @@
   </script>
 </body>
 </html>
+
