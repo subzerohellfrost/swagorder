@@ -292,7 +292,7 @@ button:hover {
 <script>
 emailjs.init("aQIlRxnSDExbWv09B");
 
-// Base price
+// ------------------ BASE ------------------
 const basePrices = { "T-Shirt": { S:35, M:35, L:35, XL:35, "2XL":37, "3XL":38, "4XL":39, "5XL":39 } };
 let cart = [];
 
@@ -310,10 +310,9 @@ const quantityInput = document.getElementById("quantity");
 const cartList = document.getElementById("cartList");
 const totalDisplay = document.getElementById("total");
 
-// ---------------- ICE EFFECT ----------------
+// ------------------ ICE ------------------
 const iceContainer = document.getElementById('iceContainer');
-const iceCount = 120;
-for(let i=0;i<iceCount;i++){
+for(let i=0;i<120;i++){
   const ice = document.createElement('div');
   ice.classList.add('iceShard');
   ice.style.left = Math.random()*100+'vw';
@@ -326,11 +325,11 @@ for(let i=0;i<iceCount;i++){
   iceContainer.appendChild(ice);
 }
 
-// ---------------- PREVIEW ----------------
+// ------------------ PREVIEW ------------------
 function loadImage(imgElement, baseName){
-  const extensions = ["png","jpg","JPG","PNG"];
-  let loaded = false;
-  extensions.forEach(ext=>{
+  const exts = ["png","jpg","JPG","PNG"];
+  let loaded=false;
+  exts.forEach(ext=>{
     if(!loaded){
       const testImg = new Image();
       testImg.onload = ()=>{ imgElement.src = `${baseName}.${ext}`; loaded=true; };
@@ -342,43 +341,40 @@ function loadImage(imgElement, baseName){
 function updatePreview(){
   const front = frontSelect.value;
   const back = backSelect.value;
+
   if(front){
     loadImage(frontImage, front);
-    frontImage.style.display = "block";
-    frontCaption.textContent = `Front: ${front.toUpperCase()}`;
-  }else{
-    frontImage.src=""; frontImage.style.display="none"; frontCaption.textContent="Please make a selection";
-  }
+    frontImage.style.display="block";
+    frontCaption.textContent=`Front: ${front.toUpperCase()}`;
+  } else { frontImage.style.display="none"; frontCaption.textContent="Please make a selection"; }
+
   if(back){
     loadImage(backImage, back);
     backImage.style.display="block";
     backCaption.textContent=`Back Patch: ${back.charAt(0).toUpperCase()+back.slice(1)}`;
-  }else{
-    backImage.src=""; backImage.style.display="none"; backCaption.textContent="Please make a selection";
-  }
+  } else { backImage.style.display="none"; backCaption.textContent="Please make a selection"; }
 }
 
 frontSelect.addEventListener("change", updatePreview);
 backSelect.addEventListener("change", updatePreview);
 
-// ---------------- CART ----------------
+// ------------------ CART ------------------
 function updateCart(){
-  cartList.innerHTML = "";
+  cartList.innerHTML="";
   let total=0;
-  cart.forEach((item,index)=>{
-    const lineTotal = item.price*item.quantity;
-    total+=lineTotal;
+  cart.forEach((i, idx)=>{
+    const line = i.price*i.quantity;
+    total+=line;
     const li = document.createElement("li");
-    li.innerHTML = `${item.quantity}x ${item.item} (${item.size}) - Front ${item.front} / Back ${item.back} - Sleeve: ${item.sleeve} - Color: ${item.color} - $${lineTotal.toFixed(2)}
-      <button class="removeBtn" onclick="removeItem(${index})">Remove</button>`;
+    li.innerHTML = `${i.quantity}x ${i.item} (${i.size}) - Front ${i.front} / Back ${i.back} - Sleeve ${i.sleeve} - Color ${i.color} - $${line.toFixed(2)}
+      <button class="removeBtn" onclick="removeItem(${idx})">Remove</button>`;
     cartList.appendChild(li);
   });
   totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
 }
+function removeItem(idx){ cart.splice(idx,1); updateCart(); }
 
-function removeItem(index){ cart.splice(index,1); updateCart(); }
-
-document.getElementById("addToCartBtn").addEventListener("click",()=>{
+document.getElementById("addToCartBtn").addEventListener("click", ()=>{
   const item="T-Shirt";
   const size=sizeSelect.value;
   const front=frontSelect.value;
@@ -398,45 +394,9 @@ document.getElementById("addToCartBtn").addEventListener("click",()=>{
   updatePreview();
 });
 
-// ---------------- SUBMIT ORDER ----------------
-document.getElementById("submitOrderBtn").addEventListener("click",()=>{
-  if(cart.length===0){ alert("Please add items to cart."); return; }
-
-  const total = cart.reduce((sum,i)=>sum+i.price*i.quantity,0);
-
-  const orderTable = `
-    <table style="width:100%; border-collapse: collapse; text-align:left; font-family: Arial, sans-serif; background-color:#111; color:#FFD700;">
-      <thead>
-        <tr style="border-bottom:2px solid #FFD700;">
-          <th style="padding:8px; border:1px solid #FFD700;">Qty</th>
-          <th style="padding:8px; border:1px solid #FFD700;">Item</th>
-          <th style="padding:8px; border:1px solid #FFD700;">Size</th>
-          <th style="padding:8px; border:1px solid #FFD700;">Front</th>
-          <th style="padding:8px; border:1px solid #FFD700;">Back</th>
-          <th style="padding:8px; border:1px solid #FFD700;">Sleeve</th>
-          <th style="padding:8px; border:1px solid #FFD700;">Color</th>
-          <th style="padding:8px; border:1px solid #FFD700;">Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${cart.map(i=>`
-          <tr style="border-bottom:1px solid #FFD700;">
-            <td style="padding:5px; border:1px solid #FFD700;">${i.quantity}</td>
-            <td style="padding:5px; border:1px solid #FFD700;">${i.item}</td>
-            <td style="padding:5px; border:1px solid #FFD700;">${i.size}</td>
-            <td style="padding:5px; border:1px solid #FFD700;">${i.front}</td>
-            <td style="padding:5px; border:1px solid #FFD700;">${i.back}</td>
-            <td style="padding:5px; border:1px solid #FFD700;">${i.sleeve}</td>
-            <td style="padding:5px; border:1px solid #FFD700;">${i.color}</td>
-            <td style="padding:5px; border:1px solid #FFD700;">$${(i.price*i.quantity).toFixed(2)}</td>
-          </tr>`).join('')}
-        <tr>
-          <td colspan="7" style="padding:8px; text-align:right; font-weight:bold; border:1px solid #FFD700;">Total</td>
-          <td style="padding:8px; font-weight:bold; border:1px solid #FFD700;">$${total.toFixed(2)}</td>
-        </tr>
-      </tbody>
-    </table>
-  `;
+// ------------------ EMAILJS SUBMIT ------------------
+document.getElementById("submitOrderBtn").addEventListener("click", ()=>{
+  if(cart.length===0){ alert("Add items to cart."); return; }
 
   const road = document.getElementById("customerRoad").value.trim();
   const street = document.getElementById("customerAddress").value.trim();
@@ -444,15 +404,13 @@ document.getElementById("submitOrderBtn").addEventListener("click",()=>{
   const state = document.getElementById("customerState").value.trim();
   const zip = document.getElementById("customerZip").value.trim();
 
-  let address = '';
-  if(road) address += road + ' ';
-  if(street) address += street;
-  if(city || state || zip) address += ', ';
-  if(city) address += city;
-  if(state) address += ', ' + state;
-  if(zip) address += ' ' + zip;
+  let address = [road,street].filter(Boolean).join(' ');
+  let cityStateZip = [city,state,zip].filter(Boolean).join(', ');
+  if(cityStateZip) address += ', ' + cityStateZip;
 
-  console.log('Combined Address:', address);
+  const total = cart.reduce((sum,i)=>sum+i.price*i.quantity,0);
+
+  const orderTable = cart.map(i=>`${i.quantity}x ${i.item} (${i.size}) - Front ${i.front} / Back ${i.back} - Sleeve ${i.sleeve} - Color ${i.color} - $${(i.price*i.quantity).toFixed(2)}`).join('\n');
 
   const data = {
     name: document.getElementById("customerName").value,
@@ -464,6 +422,14 @@ document.getElementById("submitOrderBtn").addEventListener("click",()=>{
     total: `$${total.toFixed(2)}`
   };
 
-  emailjs.send("service_ftlegjv","template_42rdq3n",data)
-    .then(()=>{
-      alert("✅ Thank you! A Brother will be in touch
+  console.log("Sending data:", data);
+
+  emailjs.send("service_ftlegjv","template_42rdq3n", data)
+    .then(()=>alert("✅ Order sent!"))
+    .catch(()=>alert("❌ Error sending order."));
+});
+
+updatePreview();
+</script>
+</body>
+</html>
