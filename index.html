@@ -404,28 +404,15 @@ document.getElementById("addToCartBtn").addEventListener("click",()=>{
   updatePreview();
 });
 
-updatePreview();
+// ------------------- SUBMIT ORDER -------------------
+document.getElementById("submitOrderBtn").addEventListener("click", () => {
+  if (cart.length === 0) { alert("Please add items to cart."); return; }
 
-// ---------------- EMAILJS SUBMIT HANDLER ----------------
-document.getElementById("submitOrderBtn").addEventListener("click",()=>{
+  const total = cart.reduce((sum, i) => sum + i.price*i.quantity, 0);
 
-  if(cart.length===0){ 
-    alert("Please add items to cart."); 
-    return; 
-  }
-
-  const total = cart.reduce((sum,i)=>sum + i.price*i.quantity, 0);
-
-  // Build order as HTML table
+  // Build order table
   const orderTable = `
-    <table style="
-      width:100%; 
-      border-collapse: collapse; 
-      text-align:left; 
-      font-family: Arial, sans-serif;
-      background-color:#111;
-      color:#FFD700;
-    ">
+    <table style="width:100%; border-collapse: collapse; text-align:left; font-family: Arial, sans-serif; background-color:#111; color:#FFD700;">
       <thead>
         <tr style="border-bottom:2px solid #FFD700;">
           <th style="padding:8px; border:1px solid #FFD700;">Qty</th>
@@ -439,7 +426,7 @@ document.getElementById("submitOrderBtn").addEventListener("click",()=>{
         </tr>
       </thead>
       <tbody>
-        ${cart.map(i=>`
+        ${cart.map(i => `
           <tr style="border-bottom:1px solid #FFD700;">
             <td style="padding:5px; border:1px solid #FFD700;">${i.quantity}</td>
             <td style="padding:5px; border:1px solid #FFD700;">${i.item}</td>
@@ -459,10 +446,17 @@ document.getElementById("submitOrderBtn").addEventListener("click",()=>{
     </table>
   `;
 
-  // Combine address fields
-  const address = `${document.getElementById("customerRoad").value} ${document.getElementById("customerAddress").value}, ${document.getElementById("customerCity").value}, ${document.getElementById("customerState").value} ${document.getElementById("customerZip").value}`;
+  // Combine address safely
+  const road = document.getElementById("customerRoad").value.trim();
+  const street = document.getElementById("customerAddress").value.trim();
+  const city = document.getElementById("customerCity").value.trim();
+  const state = document.getElementById("customerState").value.trim();
+  const zip = document.getElementById("customerZip").value.trim();
 
-  // Prepare data for EmailJS
+  let address = '';
+  if (road) address += road + ' ';
+  address += street + ', ' + city + ', ' + state + ' ' + zip;
+
   const data = {
     name: document.getElementById("customerName").value,
     email: document.getElementById("customerEmail").value,
@@ -473,13 +467,9 @@ document.getElementById("submitOrderBtn").addEventListener("click",()=>{
     total: `$${total.toFixed(2)}`
   };
 
-  emailjs.send("service_ftlegjv","template_42rdq3n",data)
-    .then(()=>{
+  emailjs.send("service_ftlegjv", "template_42rdq3n", data)
+    .then(() => {
       alert("✅ Thank you! A Brother will be in touch to confirm your order.");
-
-      // Clear cart and form
-      cart=[]; updateCart();
+      cart = []; updateCart();
       document.getElementById("customerName").value='';
-      document.getElementById("customerRoad").value='';
-      document.getElementById("customerAddress").value='';
-      document.getElementById("customer
+      document
