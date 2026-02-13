@@ -310,27 +310,27 @@ const quantityInput = document.getElementById("quantity");
 const cartList = document.getElementById("cartList");
 const totalDisplay = document.getElementById("total");
 
-// Ice generation
+// ---------------- ICE EFFECT ----------------
 const iceContainer = document.getElementById('iceContainer');
 const iceCount = 120;
-for(let i=0; i<iceCount; i++){
+for(let i=0;i<iceCount;i++){
   const ice = document.createElement('div');
   ice.classList.add('iceShard');
-  ice.style.left = Math.random() * 100 + 'vw';
-  ice.style.top = Math.random() * -100 + 'vh';
-  ice.style.width = 1 + Math.random()*3 + 'px';
-  ice.style.height = 5 + Math.random()*20 + 'px';
-  ice.style.animationDuration = 3 + Math.random()*4 + 's';
-  ice.style.animationDelay = Math.random()*5 + 's';
-  ice.style.opacity = 0.3 + Math.random()*0.7;
+  ice.style.left = Math.random()*100+'vw';
+  ice.style.top = Math.random()*-100+'vh';
+  ice.style.width = 1+Math.random()*3+'px';
+  ice.style.height = 5+Math.random()*20+'px';
+  ice.style.animationDuration = 3+Math.random()*4+'s';
+  ice.style.animationDelay = Math.random()*5+'s';
+  ice.style.opacity = 0.3+Math.random()*0.7;
   iceContainer.appendChild(ice);
 }
 
-// Preview images
-function loadImage(imgElement, baseName) {
+// ---------------- PREVIEW ----------------
+function loadImage(imgElement, baseName){
   const extensions = ["png","jpg","JPG","PNG"];
   let loaded = false;
-  extensions.forEach(ext => {
+  extensions.forEach(ext=>{
     if(!loaded){
       const testImg = new Image();
       testImg.onload = ()=>{ imgElement.src = `${baseName}.${ext}`; loaded=true; };
@@ -346,26 +346,22 @@ function updatePreview(){
     loadImage(frontImage, front);
     frontImage.style.display = "block";
     frontCaption.textContent = `Front: ${front.toUpperCase()}`;
-  } else {
-    frontImage.src = "";
-    frontImage.style.display = "none";
-    frontCaption.textContent = "Please make a selection";
+  }else{
+    frontImage.src=""; frontImage.style.display="none"; frontCaption.textContent="Please make a selection";
   }
   if(back){
     loadImage(backImage, back);
-    backImage.style.display = "block";
-    backCaption.textContent = `Back Patch: ${back.charAt(0).toUpperCase() + back.slice(1)}`;
-  } else {
-    backImage.src = "";
-    backImage.style.display = "none";
-    backCaption.textContent = "Please make a selection";
+    backImage.style.display="block";
+    backCaption.textContent=`Back Patch: ${back.charAt(0).toUpperCase()+back.slice(1)}`;
+  }else{
+    backImage.src=""; backImage.style.display="none"; backCaption.textContent="Please make a selection";
   }
 }
 
 frontSelect.addEventListener("change", updatePreview);
 backSelect.addEventListener("change", updatePreview);
 
-// Cart functions
+// ---------------- CART ----------------
 function updateCart(){
   cartList.innerHTML = "";
   let total=0;
@@ -373,10 +369,8 @@ function updateCart(){
     const lineTotal = item.price*item.quantity;
     total+=lineTotal;
     const li = document.createElement("li");
-    li.innerHTML = `
-      ${item.quantity}x ${item.item} (${item.size}) - Front ${item.front} / Back ${item.back} - Sleeve: ${item.sleeve} - Color: ${item.color} - $${lineTotal.toFixed(2)}
-      <button class="removeBtn" onclick="removeItem(${index})">Remove</button>
-    `;
+    li.innerHTML = `${item.quantity}x ${item.item} (${item.size}) - Front ${item.front} / Back ${item.back} - Sleeve: ${item.sleeve} - Color: ${item.color} - $${lineTotal.toFixed(2)}
+      <button class="removeBtn" onclick="removeItem(${index})">Remove</button>`;
     cartList.appendChild(li);
   });
   totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
@@ -392,7 +386,7 @@ document.getElementById("addToCartBtn").addEventListener("click",()=>{
   const sleeve=sleeveSelect.value;
   const color=colorSelect.value;
   const quantity=parseInt(quantityInput.value);
-  if(!size || !front || !back || !sleeve || !color || quantity<1) return;
+  if(!size||!front||!back||!sleeve||!color||quantity<1)return;
   const price = basePrices[item][size];
   cart.push({item,size,front,back,sleeve,color,quantity,price});
   updateCart();
@@ -404,13 +398,12 @@ document.getElementById("addToCartBtn").addEventListener("click",()=>{
   updatePreview();
 });
 
-// ------------------- SUBMIT ORDER -------------------
-document.getElementById("submitOrderBtn").addEventListener("click", () => {
-  if (cart.length === 0) { alert("Please add items to cart."); return; }
+// ---------------- SUBMIT ORDER ----------------
+document.getElementById("submitOrderBtn").addEventListener("click",()=>{
+  if(cart.length===0){ alert("Please add items to cart."); return; }
 
-  const total = cart.reduce((sum, i) => sum + i.price*i.quantity, 0);
+  const total = cart.reduce((sum,i)=>sum+i.price*i.quantity,0);
 
-  // Build order table
   const orderTable = `
     <table style="width:100%; border-collapse: collapse; text-align:left; font-family: Arial, sans-serif; background-color:#111; color:#FFD700;">
       <thead>
@@ -426,7 +419,7 @@ document.getElementById("submitOrderBtn").addEventListener("click", () => {
         </tr>
       </thead>
       <tbody>
-        ${cart.map(i => `
+        ${cart.map(i=>`
           <tr style="border-bottom:1px solid #FFD700;">
             <td style="padding:5px; border:1px solid #FFD700;">${i.quantity}</td>
             <td style="padding:5px; border:1px solid #FFD700;">${i.item}</td>
@@ -436,8 +429,7 @@ document.getElementById("submitOrderBtn").addEventListener("click", () => {
             <td style="padding:5px; border:1px solid #FFD700;">${i.sleeve}</td>
             <td style="padding:5px; border:1px solid #FFD700;">${i.color}</td>
             <td style="padding:5px; border:1px solid #FFD700;">$${(i.price*i.quantity).toFixed(2)}</td>
-          </tr>
-        `).join('')}
+          </tr>`).join('')}
         <tr>
           <td colspan="7" style="padding:8px; text-align:right; font-weight:bold; border:1px solid #FFD700;">Total</td>
           <td style="padding:8px; font-weight:bold; border:1px solid #FFD700;">$${total.toFixed(2)}</td>
@@ -446,7 +438,6 @@ document.getElementById("submitOrderBtn").addEventListener("click", () => {
     </table>
   `;
 
-  // ---------------- COMBINE ADDRESS ----------------
   const road = document.getElementById("customerRoad").value.trim();
   const street = document.getElementById("customerAddress").value.trim();
   const city = document.getElementById("customerCity").value.trim();
@@ -461,7 +452,7 @@ document.getElementById("submitOrderBtn").addEventListener("click", () => {
   if(state) address += ', ' + state;
   if(zip) address += ' ' + zip;
 
-  console.log('Combined Address:', address); // ✅ check in browser console
+  console.log('Combined Address:', address);
 
   const data = {
     name: document.getElementById("customerName").value,
@@ -473,4 +464,6 @@ document.getElementById("submitOrderBtn").addEventListener("click", () => {
     total: `$${total.toFixed(2)}`
   };
 
-  emailjs.send("service_ftlegjv", "template_42
+  emailjs.send("service_ftlegjv","template_42rdq3n",data)
+    .then(()=>{
+      alert("✅ Thank you! A Brother will be in touch
