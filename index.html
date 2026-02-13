@@ -446,7 +446,7 @@ document.getElementById("submitOrderBtn").addEventListener("click", () => {
     </table>
   `;
 
-  // Combine address safely
+  // ---------------- COMBINE ADDRESS ----------------
   const road = document.getElementById("customerRoad").value.trim();
   const street = document.getElementById("customerAddress").value.trim();
   const city = document.getElementById("customerCity").value.trim();
@@ -454,8 +454,14 @@ document.getElementById("submitOrderBtn").addEventListener("click", () => {
   const zip = document.getElementById("customerZip").value.trim();
 
   let address = '';
-  if (road) address += road + ' ';
-  address += street + ', ' + city + ', ' + state + ' ' + zip;
+  if(road) address += road + ' ';
+  if(street) address += street;
+  if(city || state || zip) address += ', ';
+  if(city) address += city;
+  if(state) address += ', ' + state;
+  if(zip) address += ' ' + zip;
+
+  console.log('Combined Address:', address); // ✅ check in browser console
 
   const data = {
     name: document.getElementById("customerName").value,
@@ -467,9 +473,4 @@ document.getElementById("submitOrderBtn").addEventListener("click", () => {
     total: `$${total.toFixed(2)}`
   };
 
-  emailjs.send("service_ftlegjv", "template_42rdq3n", data)
-    .then(() => {
-      alert("✅ Thank you! A Brother will be in touch to confirm your order.");
-      cart = []; updateCart();
-      document.getElementById("customerName").value='';
-      document
+  emailjs.send("service_ftlegjv", "template_42
