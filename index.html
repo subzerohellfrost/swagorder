@@ -249,22 +249,10 @@
       // Combine address fields into one 'address' string
       const customerAddress = `${document.getElementById("customerAddress").value}, ${document.getElementById("customerCity").value}, ${document.getElementById("customerState").value} ${document.getElementById("customerZip").value}`;
 
-      // Debug: Log the customer address to make sure it's correct
-      console.log("Customer Address:", customerAddress);
-
-      // Create data object
-      const data = {
-        name: document.getElementById("customerName").value,
-        road: document.getElementById("customerRoad").value, // Optional field
-        email: document.getElementById("customerEmail").value,
-        phone: document.getElementById("customerPhone").value,
-        address: customerAddress,  // Send the full address
-        notes: document.getElementById("customerNotes").value,
-        order: orderDetails,
-        total: `$${total.toFixed(2)}`,
-      };
-
-      // Debug: Log the entire data object to ensure it's being sent correctly
-      console.log("Sending data to EmailJS:", data);
-
-      // Send
+      // If any part of the address is missing, log a warning in the console
+      if (!document.getElementById("customerAddress").value || !document.getElementById("customerCity").value || !document.getElementById("customerState").value || !document.getElementById("customerZip").value) {
+        console.warn("Missing address field(s): ", {
+          street: document.getElementById("customerAddress").value,
+          city: document.getElementById("customerCity").value,
+          state: document.getElementById("customerState").value,
+         
