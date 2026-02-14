@@ -190,8 +190,6 @@
   </div>
 
   <form id="orderForm" style="position: relative; z-index:2;">
-    <!-- Item, Size, Front, Back Patch, etc. (same as before) -->
-
     <label>Name:</label>
     <input id="customerName" required>
 
@@ -226,33 +224,36 @@
   <script>
     emailjs.init("aQIlRxnSDExbWv09B");
 
-    // Cart and Item Handling (Same as Before)
-
     document.getElementById("submitOrderBtn").addEventListener("click", () => {
-      // Check if the cart is empty
-      if (cart.length === 0) {
-        alert("Please add items to cart.");
+      // Collect all form values
+      const customerAddress = `${document.getElementById("customerAddress").value}, ${document.getElementById("customerCity").value}, ${document.getElementById("customerState").value} ${document.getElementById("customerZip").value}`;
+      
+      // Check if any fields are empty
+      if (!document.getElementById("customerAddress").value || !document.getElementById("customerCity").value || !document.getElementById("customerState").value || !document.getElementById("customerZip").value) {
+        alert("Please fill out all address fields.");
         return;
       }
 
-      // Calculate total order cost
-      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      
-      // Prepare order details
-      const orderDetails = cart
-        .map(
-          (item) =>
-            `${item.quantity}x ${item.item} (${item.size}) - Front ${item.front} / Back ${item.back} - Sleeve: ${item.sleeve} - Color: ${item.color}`
-        )
-        .join("\n");
+      const data = {
+        name: document.getElementById("customerName").value,
+        road: document.getElementById("customerRoad").value,
+        email: document.getElementById("customerEmail").value,
+        phone: document.getElementById("customerPhone").value,
+        address: customerAddress,
+        notes: document.getElementById("customerNotes").value,
+        order: "Sample Order",  // This would be dynamic in your full cart system
+        total: "$35.00"  // Example total
+      };
 
-      // Combine address fields into one 'address' string
-      const customerAddress = `${document.getElementById("customerAddress").value}, ${document.getElementById("customerCity").value}, ${document.getElementById("customerState").value} ${document.getElementById("customerZip").value}`;
-
-      // If any part of the address is missing, log a warning in the console
-      if (!document.getElementById("customerAddress").value || !document.getElementById("customerCity").value || !document.getElementById("customerState").value || !document.getElementById("customerZip").value) {
-        console.warn("Missing address field(s): ", {
-          street: document.getElementById("customerAddress").value,
-          city: document.getElementById("customerCity").value,
-          state: document.getElementById("customerState").value,
-         
+      // Send the order using EmailJS
+      emailjs.send("service_ftlegjv", "template_42rdq3n", data)
+        .then(() => {
+          alert("Order submitted successfully!");
+        })
+        .catch((error) => {
+          alert("Error submitting order: " + error);
+        });
+    });
+  </script>
+</body>
+</html>
