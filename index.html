@@ -229,12 +229,16 @@
     // Cart and Item Handling (Same as Before)
 
     document.getElementById("submitOrderBtn").addEventListener("click", () => {
+      // Check if the cart is empty
       if (cart.length === 0) {
         alert("Please add items to cart.");
         return;
       }
 
+      // Calculate total order cost
       const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      
+      // Prepare order details
       const orderDetails = cart
         .map(
           (item) =>
@@ -242,32 +246,25 @@
         )
         .join("\n");
 
-      // Combine address fields into one address string
+      // Combine address fields into one 'address' string
+      const customerAddress = `${document.getElementById("customerAddress").value}, ${document.getElementById("customerCity").value}, ${document.getElementById("customerState").value} ${document.getElementById("customerZip").value}`;
+
+      // Debug: Log the customer address to make sure it's correct
+      console.log("Customer Address:", customerAddress);
+
+      // Create data object
       const data = {
         name: document.getElementById("customerName").value,
-        road: document.getElementById("customerRoad").value,
+        road: document.getElementById("customerRoad").value, // Optional field
         email: document.getElementById("customerEmail").value,
         phone: document.getElementById("customerPhone").value,
-        address: `${document.getElementById("customerAddress").value}, ${document.getElementById("customerCity").value}, ${document.getElementById("customerState").value} ${document.getElementById("customerZip").value}`,
+        address: customerAddress,  // Send the full address
         notes: document.getElementById("customerNotes").value,
         order: orderDetails,
         total: `$${total.toFixed(2)}`,
       };
 
-      // Log the data object
-      console.log(data);
+      // Debug: Log the entire data object to ensure it's being sent correctly
+      console.log("Sending data to EmailJS:", data);
 
-      // Send to EmailJS
-      emailjs
-        .send("service_ftlegjv", "template_42rdq3n", data)
-        .then(() => {
-          alert("✅ Thank you! A Brother will be in touch to confirm your order.");
-          cart = [];
-          updateCart();
-          resetForm();
-        })
-        .catch(() => alert("❌ Error sending order. Please try again."));
-    });
-
-    function resetForm() {
-      // Clear form
+      // Send
